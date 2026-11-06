@@ -2618,6 +2618,11 @@
             }
             return;
           }
+
+          if (data.type === "processing_error") {
+            log(`Frame processing failed: ${data.error || "unknown backend error"}`, "error");
+            return;
+          }
           
           if (data.type === "calibration_status") {
             state.calibrationStatus = data.calibration || null;

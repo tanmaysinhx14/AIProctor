@@ -1,0 +1,20 @@
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+# Deep Learning (CUDA 12.1 configured)
+torch
+torchvision
+
+# Backend & Web
+fastapi
+uvicorn[standard]
+websockets
+
+# Computer Vision & ML
+opencv-contrib-python<5
+ultralytics
+mediapipe==0.10.9
+numpy<2
+scipy
+
+# System Utilities
+psutil

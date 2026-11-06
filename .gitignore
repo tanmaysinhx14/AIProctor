@@ -1,0 +1,15 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Automatically Generated Reports
+reports/
+
+# Local Virtual Environment Files (use Python =< 3.11.9)
+.venv

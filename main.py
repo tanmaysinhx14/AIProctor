@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import binascii
+import logging
 from datetime import datetime, timezone
 from pathlib import Path
 from threading import Lock
@@ -36,6 +37,7 @@ from vision.tier_engine import TierEngine
 
 app = FastAPI(title="Advanced AI Proctoring Backend")
 _frontend_path = Path(__file__).resolve().parent / "frontend" / "index.html"
+logger = logging.getLogger("aiproctor")
 
 
 def _warmup_models_sync() -> None:
@@ -998,7 +1000,19 @@ async def websocket_proctoring(websocket: WebSocket) -> None:
       frame_base64 = await frame_queue.get()
       if frame_base64 is None:
         break
-      response = await session.process_frame(frame_base64)
+      try:
+        response = await session.process_frame(frame_base64)
+      except Exception as exc:
+        logger.exception("Frame processing failed")
+        response = {
+          "type": "processing_error",
+          "error": str(exc),
+          "metrics": {
+            "processedFrames": 0,
+            "droppedFrames": 0,
+            "yoloDevice": session.object_detector.runtime_device(),
+          },
+        }
 
       if render_queue.full():
         try:
